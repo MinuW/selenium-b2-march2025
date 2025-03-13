@@ -27,14 +27,14 @@ public class LoginNegativeTests {
     @Test
     public void testLoginInvalidUsernameValidPassword(){
 
-        driver.findElement(By.id("user-name")).sendKeys("standard_users");      //Type Invalid Username
-        driver.findElement(By.id("password")).sendKeys("secret_sauce");         //Type Valid Password
-        driver.findElement(By.id("login-button")).click();                                  //Click Login Button
+        driver.findElement(By.id("user-name")).sendKeys("standard_users");  //Type Invalid Username
+        driver.findElement(By.id("password")).sendKeys("secret_sauce");     //Type Valid Password
+        driver.findElement(By.id("login-button")).click();//Click Login Button
 
         //Validation
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
 
-        driver.navigate().refresh();                                                        //Refresh Page before next Test
+        driver.navigate().refresh();    //Refresh Page before next Test
 
 
 
@@ -49,7 +49,7 @@ public class LoginNegativeTests {
 
         //Validation
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
-        driver.navigate().refresh();                                                        //Refresh Page before next Test
+        driver.navigate().refresh();        //Refresh Page before next Test
 
     }
 
@@ -61,7 +61,7 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
-        driver.navigate().refresh();                                                        //Refresh Page before next Test
+        driver.navigate().refresh();       //Refresh Page before next Test
 
     }
 
@@ -73,7 +73,7 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                  //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username is required");
-        driver.navigate().refresh();                                                        //Refresh Page before next Test
+        driver.navigate().refresh();       //Refresh Page before next Test
 
     }
 
@@ -82,21 +82,21 @@ public class LoginNegativeTests {
 
         driver.findElement(By.id("user-name")).sendKeys("standard_user");         //Type Username
         driver.findElement(By.id("password")).sendKeys("");                       //Blank Password
-        driver.findElement(By.id("login-button")).click();                                     //Button Click
+        driver.findElement(By.id("login-button")).click();                                    //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Password is required");
-        driver.navigate().refresh();                                                            //Refresh Page before next Test
+        driver.navigate().refresh();          //Refresh Page before next Test
     }
 
     @Test
     public void blankUserNamePassword(){
 
-        driver.findElement(By.id("user-name")).sendKeys("");                        //Blank Username
-        driver.findElement(By.id("password")).sendKeys("");                         //Blank Password
-        driver.findElement(By.id("login-button")).click();                                      //Button Click
+        driver.findElement(By.id("user-name")).sendKeys("");              //Blank Username
+        driver.findElement(By.id("password")).sendKeys("");               //Blank Password
+        driver.findElement(By.id("login-button")).click();                            //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username is required");
-        driver.navigate().refresh();
+        driver.navigate().refresh();        //Refresh Page before next Test
 
     }
 
@@ -108,7 +108,7 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                      //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Sorry, this user has been locked out.");
-        driver.navigate().refresh();
+        driver.navigate().refresh();        //Refresh Page before next Test
     }
 
     @Test
@@ -119,18 +119,18 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                      //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
-        driver.navigate().refresh();
+        driver.navigate().refresh();        //Refresh Page before next Test
     }
 
     @Test
     public void veryLongUserNamePassword(){
 
-        driver.findElement(By.id("user-name")).sendKeys("16UQLq1HZ3CNwhvgrarV6pMoA2CDjb4tyFmsls");               //Long Username
-        driver.findElement(By.id("password")).sendKeys("secret_sauce");                                         //Password
+        driver.findElement(By.id("user-name")).sendKeys("16UQLq1HZ3CNwhvgrarV6pMoA2CDjb4tyFmsls");              //Long Username
+        driver.findElement(By.id("password")).sendKeys("secret_sauce");                                         //Correct Password
         driver.findElement(By.id("login-button")).click();                                                                  //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
-        driver.navigate().refresh();
+        driver.navigate().refresh();        //Refresh Page before next Test
 
     }
 
