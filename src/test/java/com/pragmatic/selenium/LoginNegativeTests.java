@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -24,6 +25,13 @@ public class LoginNegativeTests {
 
     }
 
+    @BeforeMethod
+    public void refreshBrowser(){
+
+        driver.navigate().refresh();    //Refresh Page before next Test
+
+    }
+
     @Test
     public void testLoginInvalidUsernameValidPassword(){
 
@@ -33,10 +41,6 @@ public class LoginNegativeTests {
 
         //Validation
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
-
-        driver.navigate().refresh();    //Refresh Page before next Test
-
-
 
     }
 
@@ -49,8 +53,6 @@ public class LoginNegativeTests {
 
         //Validation
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
-        driver.navigate().refresh();        //Refresh Page before next Test
-
     }
 
     @Test
@@ -61,7 +63,6 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
-        driver.navigate().refresh();       //Refresh Page before next Test
 
     }
 
@@ -73,7 +74,6 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                  //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username is required");
-        driver.navigate().refresh();       //Refresh Page before next Test
 
     }
 
@@ -85,7 +85,7 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                    //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Password is required");
-        driver.navigate().refresh();          //Refresh Page before next Test
+
     }
 
     @Test
@@ -96,7 +96,6 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                            //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username is required");
-        driver.navigate().refresh();        //Refresh Page before next Test
 
     }
 
@@ -108,7 +107,7 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                      //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Sorry, this user has been locked out.");
-        driver.navigate().refresh();        //Refresh Page before next Test
+
     }
 
     @Test
@@ -119,7 +118,7 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                      //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
-        driver.navigate().refresh();        //Refresh Page before next Test
+
     }
 
     @Test
@@ -130,7 +129,6 @@ public class LoginNegativeTests {
         driver.findElement(By.id("login-button")).click();                                                                  //Button Click
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
-        driver.navigate().refresh();        //Refresh Page before next Test
 
     }
 
