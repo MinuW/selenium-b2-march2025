@@ -15,23 +15,27 @@ public class HelloSeleniumTest {
 
     //Launching browser instance
         WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
 
     //Navigate to the Login page
         driver.get("https://www.saucedemo.com/");
-        driver.manage().window().maximize();
+
 
     //Type username
         WebElement txtUserName = driver.findElement(By.id("user-name"));
-        txtUserName.sendKeys("standard_user");
         txtUserName.clear();
+        txtUserName.sendKeys("standard_user");
+
     //Type pw
-        driver.findElement(By.id("password")).sendKeys("secret_sauce");
+        WebElement txtPassword = driver.findElement(By.id("password"));
+        txtPassword.clear();
+        txtPassword.sendKeys("secret_sauce");
 
     //Click Login button
 
         driver.findElement(By.id("login-button")).click();
     //Verification
-        Assert.assertEquals(driver.findElement(By.cssSelector(".title")).getText(), "Products");
+        Assert.assertEquals(driver.findElement(By.cssSelector(".title")).getText(), "Products","Login failed - Page title mismatch.");
 
     //Close
         driver.quit();
