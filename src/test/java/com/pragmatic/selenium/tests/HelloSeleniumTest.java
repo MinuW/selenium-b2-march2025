@@ -1,4 +1,4 @@
-package com.pragmatic.selenium;
+package com.pragmatic.selenium.tests;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,16 +9,18 @@ import org.testng.annotations.Test;
 
 public class HelloSeleniumTest {
 
+    public WebDriver driver;
+    public String urlSauceDemo = "https://www.saucedemo.com/";
 
     @Test
     public void testHelloSelenium(){
 
     //Launching browser instance
-        WebDriver driver = new ChromeDriver();
+        driver = new ChromeDriver();
         driver.manage().window().maximize();
 
     //Navigate to the Login page
-        driver.get("https://www.saucedemo.com/");
+        driver.get(urlSauceDemo);
 
 
     //Type username
@@ -41,4 +43,7 @@ public class HelloSeleniumTest {
         driver.quit();
 
     }
+
+
+
 }

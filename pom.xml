@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium-java.version>4.29.0</selenium-java.version>
         <testng.version>7.11.0</testng.version>
+        <datafaker.version>2.4.2</datafaker.version>
     </properties>
 
     <!-- Selenium Java-->
@@ -33,6 +34,14 @@
             <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.datafaker/datafaker -->
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>${datafaker.version}</version>
+        </dependency>
+
 
     </dependencies>
 </project>
