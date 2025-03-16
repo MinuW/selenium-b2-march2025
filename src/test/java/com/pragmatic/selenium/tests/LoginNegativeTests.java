@@ -1,13 +1,10 @@
-package com.pragmatic.selenium;
+package com.pragmatic.selenium.tests;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 public class LoginNegativeTests {
 
@@ -130,6 +127,30 @@ public class LoginNegativeTests {
 
         Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
 
+    }
+
+    /*
+    Data Provider Example
+     */
+
+    @DataProvider(name = "user-credentials")
+    public Object[][] userCredentials(){
+        return new Object[][]{
+                {"","", "Epic sadface: Username is required" },
+                {"","password","Epic sadface: Username is required"},
+                {"standard_user","","Epic sadface: Password is required"}
+
+        };
+    }
+
+    @Test(dataProvider = "user-credentials")
+    public void testInvalidScenariosWithDDT(String username, String password, String expectedError){
+
+        driver.findElement(By.id("user-name")).sendKeys(username);
+        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("login-button")).click();
+
+        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),expectedError);
     }
 
 
