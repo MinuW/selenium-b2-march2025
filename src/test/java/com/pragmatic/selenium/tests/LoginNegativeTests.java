@@ -2,6 +2,7 @@ package com.pragmatic.selenium.tests;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -29,15 +30,68 @@ public class LoginNegativeTests {
 
     }
 
+    /*
+        Base Scenario
+     */
+    public void testValidUsernameAndPassword(){
+
+        enterUserCredentials("standard_user", "secret_sauce");
+
+        clickLoginButton();
+
+    }
+
+    /*
+        Start of Utility Methods
+     */
+
+    private void enterUserCredentials(String userName, String password) {
+        WebElement txtUsername = driver.findElement(By.id("user-name"));
+        txtUsername.clear();
+        txtUsername.sendKeys(userName);  //Type Valid Username
+
+        WebElement txtPassword = driver.findElement(By.id("password"));
+        txtPassword.clear();
+        txtPassword.sendKeys(password);     //Type Valid Password
+    }
+
+    private void clickLoginButton() {
+        WebElement clkLoginButton = driver.findElement(By.id("login-button"));
+        clkLoginButton.click();//Click Login Button
+    }
+
+
+     /*
+        End of Utility Methods
+     */
+
+//    @Test
+//    public void testValidCredentials(){
+//
+//        enterUserCredentials("standard_user","secret_sauce");
+//        clickLoginButton();
+//
+//    }
+
     @Test
     public void testLoginInvalidUsernameValidPassword(){
 
+        /*
         driver.findElement(By.id("user-name")).sendKeys("standard_users");  //Type Invalid Username
         driver.findElement(By.id("password")).sendKeys("secret_sauce");     //Type Valid Password
         driver.findElement(By.id("login-button")).click();//Click Login Button
+        */
+
+        /*
+        Use of Utility methods
+         */
+
+        enterUserCredentials("standard_userse","secret_sauce");
+        clickLoginButton();
 
         //Validation
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='error']")).getText(),"Epic sadface: Username and password do not match any user in this service");
+        WebElement errorMessage = driver.findElement(By.cssSelector("[data-test='error']"));
+        Assert.assertEquals(errorMessage.getText(),"Epic sadface: Username and password do not match any user in this service");
 
     }
 
