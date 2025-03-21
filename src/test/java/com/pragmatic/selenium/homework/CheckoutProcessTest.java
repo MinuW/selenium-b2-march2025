@@ -1,5 +1,6 @@
 package com.pragmatic.selenium.homework;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import net.datafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -18,6 +19,7 @@ public class CheckoutProcessTest {
     @BeforeMethod
     public void setUp(){
 
+        WebDriverManager.firefoxdriver().setup();//Manager
         driver = new FirefoxDriver();
         driver.manage().window().maximize();
         driver.get(urlSauceDemo);//Open the Sauce Demo website
