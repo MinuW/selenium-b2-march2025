@@ -24,12 +24,18 @@ public class CheckoutProcessTest {
 
     }
 
+    @AfterMethod
+    public void tearDown(){
+        if (driver != null){
+            driver.quit();
+        }
+    }
+
     /*
         Start of Utility Methods
      */
 
     private void userLogin(String username, String password) {
-
         WebElement txtUsername = driver.findElement(By.id("user-name"));
         txtUsername.clear();
         txtUsername.sendKeys(username);  //Type Valid Username
@@ -43,9 +49,57 @@ public class CheckoutProcessTest {
 
     }
 
+    private void generateUserDetails() {
+        Faker faker = new Faker();
+        String fakeFirstName = faker.name().firstName();
+        String fakeLastName = faker.name().lastName();
+        String zipCode = faker.number().digits(5);
+
+        WebElement fName = driver.findElement(By.cssSelector("#first-name"));
+        fName.clear();
+        fName.sendKeys(fakeFirstName);
+        WebElement lName = driver.findElement(By.cssSelector("#last-name"));
+        lName.clear();
+        lName.sendKeys(fakeLastName);
+        WebElement pCode = driver.findElement(By.cssSelector("#postal-code"));
+        pCode.clear();
+        pCode.sendKeys(zipCode);
+    }
+
+    private void addItemsToCart() {
+        driver.findElement(By.xpath("//button[@id='add-to-cart-sauce-labs-backpack']")).click();
+        driver.findElement(By.cssSelector("#add-to-cart-sauce-labs-fleece-jacket")).click();
+        driver.findElement(By.id("add-to-cart-sauce-labs-bike-light")).click();
+
+    }
+
+    private void checkBilledItems() {
+        WebElement priceOfItemOne = driver.findElement(By.xpath("//a[@id ='item_4_title_link' ]//following-sibling::div[2]//child::div"));
+        //String ItemOne = priceOfItemOne.getText().substring(1);
+        String ItemOne = priceOfItemOne.getText();
+        //System.out.println(ItemOne);
+        Assert.assertEquals(ItemOne, "$29.99", "Item Price is Wrong! ");//Validate First Item Price
+
+        WebElement priceOfItemTwo = driver.findElement(By.xpath("//a[@id ='item_0_title_link' ]//following-sibling::div[2]//child::div"));
+        Assert.assertEquals(priceOfItemTwo.getText(),"$9.99","Item Price is Wrong! ");//Validate Second Item Price
+
+        WebElement priceOfItemThree = driver.findElement(By.xpath("//a[@id ='item_5_title_link' ]//following-sibling::div[2]//child::div"));
+        Assert.assertEquals(priceOfItemThree.getText(), "$49.99", "Item Price is Wrong! ");//Validate Thread Item Price
+
+        WebElement itemTotal = driver.findElement(By.xpath("//div[@class='summary_subtotal_label']"));
+        Assert.assertEquals(itemTotal.getText(),"Item total: $89.97","Item Total is Wrong! ");//Validate Item Total
+
+        WebElement total = driver.findElement(By.xpath("//div[@class='summary_total_label']"));
+        Assert.assertEquals(total.getText(),"Total: $97.17","Total Price is Wrong for the Order! ");//Validate Full Total of the Order
+
+        driver.findElement(By.xpath("//button[@id='finish']")).click();
+
+    }
+
     /*
         End of Utility Methods
      */
+
     @Test
     public void testValidCredentials(){
 
@@ -110,32 +164,8 @@ public class CheckoutProcessTest {
 
         checkBilledItems();
 
-
     }
 
-    private void checkBilledItems() {
-
-        WebElement priceOfItemOne = driver.findElement(By.xpath("//a[@id ='item_4_title_link' ]//following-sibling::div[2]//child::div"));
-        //String ItemOne = priceOfItemOne.getText().substring(1);
-        String ItemOne = priceOfItemOne.getText();
-        //System.out.println(ItemOne);
-        Assert.assertEquals(ItemOne, "$29.99", "Item Price is Wrong! ");//Validate First Item Price
-
-        WebElement priceOfItemTwo = driver.findElement(By.xpath("//a[@id ='item_0_title_link' ]//following-sibling::div[2]//child::div"));
-        Assert.assertEquals(priceOfItemTwo.getText(),"$9.99","Item Price is Wrong! ");//Validate Second Item Price
-
-        WebElement priceOfItemThree = driver.findElement(By.xpath("//a[@id ='item_5_title_link' ]//following-sibling::div[2]//child::div"));
-        Assert.assertEquals(priceOfItemThree.getText(), "$49.99", "Item Price is Wrong! ");//Validate Thread Item Price
-
-        WebElement itemTotal = driver.findElement(By.xpath("//div[@class='summary_subtotal_label']"));
-        Assert.assertEquals(itemTotal.getText(),"Item total: $89.97","Item Total is Wrong! ");//Validate Item Total
-
-        WebElement total = driver.findElement(By.xpath("//div[@class='summary_total_label']"));
-        Assert.assertEquals(total.getText(),"Total: $97.17","Total Price is Wrong for the Order! ");//Validate Full Total of the Order
-
-        driver.findElement(By.xpath("//button[@id='finish']")).click();
-
-    }
 
     @Test
     public void verifyOrderConfirmationMessage(){
@@ -156,35 +186,5 @@ public class CheckoutProcessTest {
 
     }
 
-    private void generateUserDetails() {
-        Faker faker = new Faker();
-        String fakeFirstName = faker.name().firstName();
-        String fakeLastName = faker.name().lastName();
-        String zipCode = faker.number().digits(5);
-
-        WebElement fName = driver.findElement(By.cssSelector("#first-name"));
-        fName.clear();
-        fName.sendKeys(fakeFirstName);
-        WebElement lName = driver.findElement(By.cssSelector("#last-name"));
-        lName.clear();
-        lName.sendKeys(fakeLastName);
-        WebElement pCode = driver.findElement(By.cssSelector("#postal-code"));
-        pCode.clear();
-        pCode.sendKeys(zipCode);
-    }
-
-    private void addItemsToCart() {
-        driver.findElement(By.xpath("//button[@id='add-to-cart-sauce-labs-backpack']")).click();
-        driver.findElement(By.cssSelector("#add-to-cart-sauce-labs-fleece-jacket")).click();
-        driver.findElement(By.id("add-to-cart-sauce-labs-bike-light")).click();
-
-    }
-
-    @AfterMethod
-    public void tearDown(){
-        if (driver != null){
-            driver.quit();
-        }
-    }
 
 }
