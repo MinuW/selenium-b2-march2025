@@ -70,10 +70,15 @@ public class SelectItemsDropDownExampleTest {
         Assert.assertEquals(selMulti.getFirstSelectedOption().getText(),"Yellow");
 
         //De-select
-//        selMulti.deselectByIndex(2);
-//        selMulti.deselectByVisibleText("Red");
+//      selMulti.deselectByIndex(2);
+//      selMulti.deselectByVisibleText("Red");
         selMulti.deselectByValue("yellow");
 
-//        selMulti.deselectAll();
+        selMulti.selectByIndex(0);
+        selMulti.selectByIndex(2);
+        selMulti.selectByIndex(3);
+
+        //Deselect All
+        selMulti.deselectAll();
     }
 }
