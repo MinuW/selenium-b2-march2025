@@ -1,7 +1,6 @@
-package com.pragmatic.selenium.homework;
+package com.pragmatic.selenium.util;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import net.datafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,24 +10,23 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class CheckoutProcessTest {
+public class CheckoutProcessRefactoredTest {
 
     public WebDriver driver;
     public String urlSauceDemo = "https://www.saucedemo.com/";
+    PersonalInfo personalInfo = new PersonalInfo();
 
     @BeforeMethod
-    public void setUp(){
-
+    public void setUp() {
         WebDriverManager.firefoxdriver().setup();//Manager
         driver = new FirefoxDriver();
         driver.manage().window().maximize();
         driver.get(urlSauceDemo);//Open the Sauce Demo website
-
     }
 
     @AfterMethod
-    public void tearDown(){
-        if (driver != null){
+    public void tearDown() {
+        if (driver != null) {
             driver.quit();
         }
     }
@@ -50,29 +48,42 @@ public class CheckoutProcessTest {
         clkLoginButton.click();//Click Login Button
 
     }
-
+/*
     private void generateUserDetails() {
         Faker faker = new Faker();
         String fakeFirstName = faker.name().firstName();
         String fakeLastName = faker.name().lastName();
         String zipCode = faker.number().digits(5);
 
+        clearAndTypePersonalDetails(By.cssSelector("#first-name"), fakeFirstName);
+        clearAndTypeLName(By.cssSelector("#last-name"), fakeLastName);
+        clearAndTypePostalCode(By.cssSelector("#postal-code"), zipCode);
+    }
+*/
+
+    private void clearAndTypePersonalDetails() {
         WebElement fName = driver.findElement(By.cssSelector("#first-name"));
         fName.clear();
-        fName.sendKeys(fakeFirstName);
+        fName.sendKeys(personalInfo.getFirstName());
+
         WebElement lName = driver.findElement(By.cssSelector("#last-name"));
         lName.clear();
-        lName.sendKeys(fakeLastName);
+        lName.sendKeys(personalInfo.getLastName());
+
         WebElement pCode = driver.findElement(By.cssSelector("#postal-code"));
         pCode.clear();
-        pCode.sendKeys(zipCode);
+        pCode.sendKeys(personalInfo.getPostalCode());
     }
 
     private void addItemsToCart() {
-        driver.findElement(By.xpath("//button[@id='add-to-cart-sauce-labs-backpack']")).click();
-        driver.findElement(By.cssSelector("#add-to-cart-sauce-labs-fleece-jacket")).click();
-        driver.findElement(By.id("add-to-cart-sauce-labs-bike-light")).click();
+        addItem(By.xpath("//button[@id='add-to-cart-sauce-labs-backpack']"));
+        addItem(By.cssSelector("#add-to-cart-sauce-labs-fleece-jacket"));
+        addItem(By.id("add-to-cart-sauce-labs-bike-light"));
 
+    }
+
+    private void addItem(By byProducts) {
+        driver.findElement(byProducts).click();
     }
 
     private void checkBilledItems() {
@@ -83,16 +94,16 @@ public class CheckoutProcessTest {
         Assert.assertEquals(ItemOne, "$29.99", "Item Price is Wrong! ");//Validate First Item Price
 
         WebElement priceOfItemTwo = driver.findElement(By.xpath("//a[@id ='item_0_title_link' ]//following-sibling::div[2]//child::div"));
-        Assert.assertEquals(priceOfItemTwo.getText(),"$9.99","Item Price is Wrong! ");//Validate Second Item Price
+        Assert.assertEquals(priceOfItemTwo.getText(), "$9.99", "Item Price is Wrong! ");//Validate Second Item Price
 
         WebElement priceOfItemThree = driver.findElement(By.xpath("//a[@id ='item_5_title_link' ]//following-sibling::div[2]//child::div"));
         Assert.assertEquals(priceOfItemThree.getText(), "$49.99", "Item Price is Wrong! ");//Validate Thread Item Price
 
         WebElement itemTotal = driver.findElement(By.xpath("//div[@class='summary_subtotal_label']"));
-        Assert.assertEquals(itemTotal.getText(),"Item total: $89.97","Item Total is Wrong! ");//Validate Item Total
+        Assert.assertEquals(itemTotal.getText(), "Item total: $89.97", "Item Total is Wrong! ");//Validate Item Total
 
         WebElement total = driver.findElement(By.xpath("//div[@class='summary_total_label']"));
-        Assert.assertEquals(total.getText(),"Total: $97.17","Total Price is Wrong for the Order! ");//Validate Full Total of the Order
+        Assert.assertEquals(total.getText(), "Total: $97.17", "Total Price is Wrong for the Order! ");//Validate Full Total of the Order
 
         driver.findElement(By.xpath("//button[@id='finish']")).click();
 
@@ -103,24 +114,25 @@ public class CheckoutProcessTest {
      */
 
     @Test
-    public void testValidCredentials(){
+    public void testValidCredentials() {
 
-        userLogin("standard_user","secret_sauce");//Login to SauceDemo Website
+        userLogin("standard_user", "secret_sauce");//Login to SauceDemo Website
 
         WebElement txtPageTitle = driver.findElement(By.cssSelector(".title"));
-        Assert.assertEquals(txtPageTitle.getText(), "Products","Login failed - Page title mismatch.");//Products Page Validation
+        Assert.assertEquals(txtPageTitle.getText(), "Products", "Login failed - Page title mismatch.");//Products Page Validation
 
     }
-    @Test
-    public void verifyAddedProducts(){
 
-        userLogin("standard_user","secret_sauce");//Login to SauceDemo Website
+    @Test
+    public void verifyAddedProducts() {
+
+        userLogin("standard_user", "secret_sauce");//Login to SauceDemo Website
         addItemsToCart();//Add Products to the Cart
 
         driver.findElement(By.xpath("//a[@class='shopping_cart_link']")).click();//click Cart icon and navigate to Cart
 
         WebElement txtCartPageTitle = driver.findElement(By.cssSelector(".title"));
-        Assert.assertEquals(txtCartPageTitle.getText(),"Your Cart", "Navigation Failed - Go to Your Cart Page ");//Cart Page Validation
+        Assert.assertEquals(txtCartPageTitle.getText(), "Your Cart", "Navigation Failed - Go to Your Cart Page ");//Cart Page Validation
 
         //Locate Added Products
         WebElement locateProductOne = driver.findElement(By.xpath("//div[text()='Sauce Labs Backpack']"));
@@ -130,39 +142,43 @@ public class CheckoutProcessTest {
         //Verify added items
         Assert.assertEquals(locateProductOne.getText(), "Sauce Labs Backpack", "Wrong Product added to the Cart, Remove or Replace");
         Assert.assertEquals(locateProductTwo.getText(), "Sauce Labs Fleece Jacket", "Wrong Product added to the Cart, Remove or Replace");
-        Assert.assertEquals(locateProductThree.getText(), "Sauce Labs Bike Light","Wrong Product added to the Cart, Remove or Replace" );
+        Assert.assertEquals(locateProductThree.getText(), "Sauce Labs Bike Light", "Wrong Product added to the Cart, Remove or Replace");
 
         driver.findElement(By.xpath("//button[@id='checkout']")).click();//Go to Checkout: Your Information Page
 
     }
+
     @Test
-    public  void  verifyUserDetailsPage(){
-        userLogin("standard_user","secret_sauce");//Login User
+    public void verifyUserDetailsPage() {
+
+
+        userLogin("standard_user", "secret_sauce");//Login User
         addItemsToCart();//Add Products to the Cart
         driver.findElement(By.xpath("//a[@class='shopping_cart_link']")).click();//click Cart icon and navigate to cart
         driver.findElement(By.xpath("//button[@id='checkout']")).click();//Go to checkout
 
         WebElement txtCheckoutInfoPageTitle = driver.findElement(By.cssSelector(".title"));
-        Assert.assertEquals(txtCheckoutInfoPageTitle.getText(), "Checkout: Your Information","Navigation Failed - Go to Checkout: Your Information Page ");
+        Assert.assertEquals(txtCheckoutInfoPageTitle.getText(), "Checkout: Your Information", "Navigation Failed - Go to Checkout: Your Information Page ");
 
-        generateUserDetails();//Generate Random User details using DataFaker
+        //Generate Random User details using DataFaker
+        clearAndTypePersonalDetails();
 
         driver.findElement(By.xpath("//input[@id='continue']")).click();//Navigate to Checkout Overview Page
 
     }
 
     @Test
-    public void verifyCheckoutOverviewPage(){
+    public void verifyCheckoutOverviewPage() {
 
-        userLogin("standard_user","secret_sauce");//Login User
+        userLogin("standard_user", "secret_sauce");//Login User
         addItemsToCart();//Add Products to the Cart
         driver.findElement(By.xpath("//a[@class='shopping_cart_link']")).click();//click Cart icon and navigate to cart
         driver.findElement(By.xpath("//button[@id='checkout']")).click();//Go to checkout
-        generateUserDetails();//Generate Random User details using DataFaker
+        //generateUserDetails();//Generate Random User details using DataFaker
         driver.findElement(By.xpath("//input[@id='continue']")).click();//Navigate to Checkout Overview Page
 
         WebElement txtCheckoutOverviewTitle = driver.findElement(By.xpath("//span[@class='title']"));
-        Assert.assertEquals(txtCheckoutOverviewTitle.getText(), "Checkout: Overview","Navigation Failed - Go to Checkout: Overview Page ");//Page Validation
+        Assert.assertEquals(txtCheckoutOverviewTitle.getText(), "Checkout: Overview", "Navigation Failed - Go to Checkout: Overview Page ");//Page Validation
 
         checkBilledItems();
 
@@ -170,21 +186,21 @@ public class CheckoutProcessTest {
 
 
     @Test
-    public void verifyOrderConfirmationMessage(){
-        userLogin("standard_user","secret_sauce");//Login User
+    public void verifyOrderConfirmationMessage() {
+        userLogin("standard_user", "secret_sauce");//Login User
         addItemsToCart();//Add Products to the Cart
         driver.findElement(By.xpath("//a[@class='shopping_cart_link']")).click();//click Cart icon and navigate to cart
         driver.findElement(By.xpath("//button[@id='checkout']")).click();//Go to checkout
-        generateUserDetails();//Generate Random User details using DataFaker
+        //generateUserDetails();//Generate Random User details using DataFaker
         driver.findElement(By.cssSelector("#continue")).click();//Navigate to Checkout Overview Page
         driver.findElement(By.xpath("//button[@id='finish']")).click();
 
-       //Verify Order Confirmation Message
+        //Verify Order Confirmation Message
         WebElement txtCheckoutCompletePage = driver.findElement(By.cssSelector(".title"));
-        Assert.assertEquals(txtCheckoutCompletePage.getText(), "Checkout: Complete!","Oder Confirmation Failed - Incomplete Order! ");
+        Assert.assertEquals(txtCheckoutCompletePage.getText(), "Checkout: Complete!", "Oder Confirmation Failed - Incomplete Order! ");
 
         WebElement txtOrderMessage = driver.findElement(By.cssSelector(".complete-text"));
-        Assert.assertEquals(txtOrderMessage.getText(),"Your order has been dispatched, and will arrive just as fast as the pony can get there!");
+        Assert.assertEquals(txtOrderMessage.getText(), "Your order has been dispatched, and will arrive just as fast as the pony can get there!");
 
     }
 
