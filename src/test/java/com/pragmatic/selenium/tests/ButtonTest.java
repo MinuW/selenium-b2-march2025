@@ -30,6 +30,18 @@ public class ButtonTest {
         }
     }
     @Test
+    public void testButtonsWithThreadSleep() throws InterruptedException {
+        driver.findElement(By.id("easy00")).click();
+        Thread.sleep(1000);
+        driver.findElement(By.id("easy01")).click();
+        Thread.sleep(2000);
+        driver.findElement(By.id("easy02")).click();
+        Thread.sleep(5000);
+        driver.findElement(By.id("easy03")).click();
+        String message = driver.findElement(By.id("easybuttonmessage")).getText();
+        Assert.assertEquals(message,"All Buttons Clicked");
+    }
+    @Test
     public void testButtonWithImplicitWait() throws InterruptedException{
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.findElement(By.id("easy00")).click();
