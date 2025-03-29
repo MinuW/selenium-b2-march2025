@@ -37,7 +37,9 @@ public class SelectItemsDropDownExampleTest {
         Assert.assertEquals(selFruits.getFirstSelectedOption().getText(),"Select a fruit");
 
         List<WebElement> options = selFruits.getOptions();
-//        for (WebElement)
+        for (WebElement option : options){
+            System.out.println(option.getText());
+        }
 
         //Select Items by Visible Text
         selFruits.selectByVisibleText("Apple");
@@ -52,7 +54,26 @@ public class SelectItemsDropDownExampleTest {
     @Test
     public void testMultiSelect(){
         WebElement eleMulti = driver.findElement(By.id("multiSelect"));
+
         //Compete multi select as homework-watch the recording
         Select selMulti = new Select(eleMulti);
+
+        selMulti.selectByIndex(2);
+        Assert.assertEquals(selMulti.getFirstSelectedOption().getText(),"Blue");
+        selMulti.deselectByIndex(2);
+
+        selMulti.selectByVisibleText("Red");
+        Assert.assertEquals(selMulti.getFirstSelectedOption().getText(),"Red");
+        selMulti.deselectByVisibleText("Red");
+
+        selMulti.selectByValue("yellow");
+        Assert.assertEquals(selMulti.getFirstSelectedOption().getText(),"Yellow");
+
+        //De-select
+//        selMulti.deselectByIndex(2);
+//        selMulti.deselectByVisibleText("Red");
+        selMulti.deselectByValue("yellow");
+
+//        selMulti.deselectAll();
     }
 }
